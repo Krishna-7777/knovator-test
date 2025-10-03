@@ -1,10 +1,12 @@
-import { Card, Button, Badge, InputGroup, FormControl } from "react-bootstrap";
+import { useState } from "react";
+import { Card, Button, Badge, InputGroup, FormControl, Placeholder } from "react-bootstrap";
 import { FaCartPlus, FaTrash } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import Swal from "sweetalert2";
 
 export default function ProductCard({ product }) {
     const { state, handleQuantityChange, deleteItem, dispatch } = useCart();
+    const [imgLoaded, setImgLoaded] = useState(false);
 
     const cartItem = state.cart.find((item) => item.id === product.id);
 
@@ -28,12 +30,20 @@ export default function ProductCard({ product }) {
     };
 
     return (
-        <Card className="h-100 shadow-sm border-0 product-card ">
+        <Card className="h-100 shadow-sm border-0 product-card">
+
+            {!imgLoaded && (
+                <Placeholder as="div" animation="glow" style={{ height: "200px", width: "100%", objectFit: "cover" }}>
+                    <Placeholder xs={12} style={{ height: "200px" }} className="card-img-top" />
+                </Placeholder>
+            )}
+
             <Card.Img
                 variant="top"
                 src={product.image}
                 alt={product.name}
-                style={{ height: "200px", objectFit: "cover" }}
+                style={{ height: "200px", width: "100%", objectFit: "cover", display: imgLoaded ? "initial" : "none" }}
+                onLoad={() => setImgLoaded(true)}
             />
             <Card.Body className="d-flex flex-column">
                 <Card.Title className="fw-semibold">{product.name}</Card.Title>
