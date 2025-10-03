@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import ProductCard from "../components/ProductCard";
-import api from "./../services/api";
+import { getProducts } from "../services/productService";
 
 export default function ProductListingPage() {
   const [products, setProducts] = useState([]);
@@ -9,7 +9,7 @@ export default function ProductListingPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    api.get("/products")
+    getProducts()
       .then((res) => {
         setProducts(res.data);
       })
