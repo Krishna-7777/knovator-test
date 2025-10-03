@@ -5,42 +5,59 @@ import { getProducts } from "../services/productService";
 
 export default function ProductListingPage() {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const limit = 9;
+  let offset = 0;
+  let hasMore = true;
+
+  const fetchProducts = async () => {
+    if (loading || !hasMore) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await getProducts(limit, offset);
+      const newProducts = res.data || [];
+
+      setProducts((prev) => [...prev, ...newProducts]);
+      hasMore = (res.data.length != 0);
+      offset += limit
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load products. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    getProducts()
-      .then((res) => {
-        setProducts(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Failed to load products. Please try again later.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY + 50 > document.body.scrollHeight
+        && !loading && hasMore
+      ) {
+        fetchProducts();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <Container>
       <h2 className="mb-4 text-center fw-bold">Products</h2>
 
-      {loading && (
-        <div className="d-flex justify-content-center align-items-center" style={{ height: "200px" }}>
-          <Spinner animation="border" variant="primary" />
-        </div>
-      )}
-
-      {!loading && error && (
+      {error && (
         <Alert variant="danger" className="text-center">
           {error}
-        </Alert>
-      )}
-
-      {!loading && !error && products.length === 0 && (
-        <Alert variant="info" className="text-center">
-          No products available.
         </Alert>
       )}
 
@@ -51,6 +68,13 @@ export default function ProductListingPage() {
           </Col>
         ))}
       </Row>
+
+      {loading && (
+        <div className="d-flex justify-content-center align-items-center my-3">
+          <Spinner animation="border" variant="primary" />
+        </div>
+      )}
+
     </Container>
   );
 }
