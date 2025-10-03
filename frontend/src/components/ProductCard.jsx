@@ -1,7 +1,30 @@
 import { Card, Button, Badge } from "react-bootstrap"
 import { FaCartPlus } from "react-icons/fa"
+import { useCart } from "../context/CartContext";
+import Swal from "sweetalert2";
 
 export default function ProductCard({ product }) {
+    const { dispatch } = useCart();
+
+    const handleAddToCart = () => {
+        dispatch({ type: "ADD_TO_CART", payload: product });
+
+        Swal.fire({
+            toast: true,
+            icon: 'success',
+            title: `Added!\n ${product.name} has been added to your cart.`,
+            animation: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+    };
+
     return (
         <Card className="h-100 shadow-sm border-0 product-card ">
             <Card.Img
@@ -19,7 +42,7 @@ export default function ProductCard({ product }) {
                     <Badge bg="success" className="fs-6">
                         ₹{product.price}
                     </Badge>
-                    <Button variant="primary" size="sm" className="d-flex align-items-center">
+                    <Button variant="primary" size="sm" className="d-flex align-items-center" onClick={handleAddToCart}>
                         <FaCartPlus className="me-2" /> Add to Cart
                     </Button>
                 </div>
