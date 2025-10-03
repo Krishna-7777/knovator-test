@@ -7,6 +7,7 @@ import CartPage from "./pages/CartPage";
 
 function App() {
   return (
+    // Wrap entire app in CartProvider to provide cart state via context
     <CartProvider>
       <Router>
         <Header />

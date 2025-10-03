@@ -1,5 +1,6 @@
 const Joi = require("joi");
 
+// schema for place order request validation 
 const orderSchema = Joi.object({
   firstName: Joi.string().trim().min(2).required().messages({
     "string.base": "First name must be text",

@@ -7,16 +7,22 @@ const orderRouter = require("./routes/orderRoutes")
 const app = express()
 const PORT = 4000
 
-app.use(express.json())
+// Middleware to parse JSON request bodies
+app.use(express.json());
+
+// Enable CORS for our frontend url which is accessed through .env
 app.use(cors({ origin: process.env.frontendURL || "http://localhost:5173/" }));
 
+// Mount routers for base routes
 app.use('/products', productRouter)
 app.use('/order', orderRouter)
 
-app.get('/status', (req,res)=>{
-    res.send({status:"ok"})
+// Simple health check endpoint
+app.get('/status', (req, res) => {
+    res.send({ status: "ok" });
 })
 
-app.listen(PORT, ()=>{
-    console.log("Server is running on http://localhost:"+PORT);
+// Start the server
+app.listen(PORT, () => {
+    console.log("Server is running on http://localhost:" + PORT);
 })

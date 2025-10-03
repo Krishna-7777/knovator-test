@@ -3,14 +3,15 @@ import { Row, Col, Button, Image, InputGroup, FormControl, Placeholder } from "r
 import { useCart } from "../context/CartContext";
 import { FaTrash } from "react-icons/fa"
 
-
+// Component for displaying a single cart item with quantity controls and delete option
 export default function CartItem({ item }) {
   const { deleteItem, handleQuantityChange } = useCart();
   const [imgLoaded, setImgLoaded] = useState(false);
 
   return (
-    <Row className="align-items-center m-1 mb-3 pt-3 pb-3 shadow-sm rounded ">
+    <Row className="align-items-center m-1 mb-3 pt-3 pb-3 shadow-sm rounded">
 
+      {/* Product image with placeholder until loaded */}
       <Col md={4} className="d-flex align-items-center">
 
         {!imgLoaded && (
@@ -29,8 +30,10 @@ export default function CartItem({ item }) {
         <span>{item.name}</span>
       </Col>
 
+      {/* Item price */}
       <Col md={2}>₹{item.price}</Col>
 
+      {/* Quantity controls */}
       <Col md={2}>
         <InputGroup size="sm" style={{ width: 100, justifySelf: 'center' }}>
           <Button
@@ -53,9 +56,10 @@ export default function CartItem({ item }) {
         </InputGroup>
       </Col>
 
-      <Col md={3} style={{ textAlign: "center" }}
-      >₹{item.price * item.quantity}</Col>
+      {/* Total price for this item */}
+      <Col md={3} style={{ textAlign: "center" }}>₹{item.price * item.quantity}</Col>
 
+      {/* Delete item button */}
       <Col md={1}>
         <Button
           variant="outline-danger"
