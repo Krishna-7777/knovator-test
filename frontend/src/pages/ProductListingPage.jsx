@@ -23,7 +23,7 @@ export default function ProductListingPage() {
   }, []);
 
   return (
-    <Container className="mt-5">
+    <Container>
       <h2 className="mb-4 text-center fw-bold">Products</h2>
 
       {loading && (
