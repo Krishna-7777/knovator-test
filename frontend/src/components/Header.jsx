@@ -1,6 +1,7 @@
 import { Navbar, Nav, Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { FaShoppingCart } from "react-icons/fa"
 
 export default function Header() {
   const navigate = useNavigate();
@@ -13,8 +14,8 @@ export default function Header() {
           Knovator Ecommerce
         </Navbar.Brand>
         <Nav className="ms-auto">
-          <Button variant="outline-light" onClick={() => navigate("/cart")}>
-            Cart {cartItems==0?'':`(${cartItems})`}
+          <Button style={{display:"flex", alignItems:"center", gap:"8px"}} variant="outline-light" onClick={() => navigate("/cart")}>
+            <FaShoppingCart /> Cart {cartItems==0?'':`(${cartItems})`}
           </Button>
         </Nav>
       </Container>

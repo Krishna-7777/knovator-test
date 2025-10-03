@@ -42,12 +42,19 @@ export function CartProvider({ children }) {
     const persistedState = JSON.parse(localStorage.getItem("cartState")) || initialState;
     const [state, dispatch] = useReducer(cartReducer, persistedState);
 
+    const handleQuantityChange = (id, qty) => {
+        if (qty < 1) return;
+        dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity: qty } });
+    };
+
+    const deleteItem = (id) => dispatch({ type: "REMOVE_FROM_CART", payload: id })
+
     useEffect(() => {
         localStorage.setItem("cartState", JSON.stringify(state));
     }, [state]);
 
     return (
-        <CartContext.Provider value={{ state, dispatch }}>
+        <CartContext.Provider value={{ state, dispatch, handleQuantityChange, deleteItem }}>
             {children}
         </CartContext.Provider>
     );
