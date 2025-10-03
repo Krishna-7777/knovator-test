@@ -1,10 +1,12 @@
-import { Card, Button, Badge } from "react-bootstrap"
-import { FaCartPlus } from "react-icons/fa"
+import { Card, Button, Badge, InputGroup, FormControl } from "react-bootstrap";
+import { FaCartPlus, FaTrash } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import Swal from "sweetalert2";
 
 export default function ProductCard({ product }) {
-    const { dispatch } = useCart();
+    const { state, handleQuantityChange, deleteItem, dispatch } = useCart();
+
+    const cartItem = state.cart.find((item) => item.id === product.id);
 
     const handleAddToCart = () => {
         dispatch({ type: "ADD_TO_CART", payload: product });
@@ -42,9 +44,49 @@ export default function ProductCard({ product }) {
                     <Badge bg="success" className="fs-6">
                         ₹{product.price}
                     </Badge>
-                    <Button variant="primary" size="sm" className="d-flex align-items-center" onClick={handleAddToCart}>
-                        <FaCartPlus className="me-2" /> Add to Cart
-                    </Button>
+
+                    {cartItem ? (
+                        <>
+                            <InputGroup size="sm" style={{ width: "100px", }}>
+                                <Button
+                                    variant={cartItem.quantity > 1 ? "outline-dark" : "outline-danger"}
+                                    size="sm"
+                                    onClick={() => {
+                                        if (cartItem.quantity > 1)
+                                            handleQuantityChange(cartItem.id, cartItem.quantity - 1)
+                                        else
+                                            deleteItem(cartItem.id)
+                                    }}
+                                >
+                                    {cartItem.quantity > 1 ? '-' : <FaTrash />}
+                                </Button>
+                                <FormControl
+                                    value={cartItem.quantity}
+                                    readOnly
+                                    className="text-center"
+                                />
+                                <Button
+                                    variant="outline-dark"
+                                    size="sm"
+                                    onClick={() =>
+                                        handleQuantityChange(cartItem.id, cartItem.quantity + 1)
+                                    }
+                                >
+                                    +
+                                </Button>
+                            </InputGroup>
+
+                        </>
+                    ) : (
+                        <Button
+                            variant="primary"
+                            size="sm"
+                            className="d-flex align-items-center"
+                            onClick={handleAddToCart}
+                        >
+                            <FaCartPlus className="me-2" /> Add to Cart
+                        </Button>
+                    )}
                 </div>
             </Card.Body>
         </Card>

@@ -8,7 +8,7 @@ export default function CartItem({ item }) {
   const { deleteItem, handleQuantityChange } = useCart();
 
   return (
-    <Row className="align-items-center m-1 mb-3 pt-3 pb-3 border rounded ">
+    <Row className="align-items-center m-1 mb-3 pt-3 pb-3 shadow-sm rounded ">
 
       <Col md={4} className="d-flex align-items-center">
         <Image
@@ -23,9 +23,9 @@ export default function CartItem({ item }) {
       <Col md={2}>₹{item.price}</Col>
 
       <Col md={2}>
-        <InputGroup>
+        <InputGroup size="sm" style={{width:100, justifySelf:'center'}}>
           <Button
-            variant="outline-secondary"
+            variant="outline-dark"
             onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
           >
             -
@@ -36,7 +36,7 @@ export default function CartItem({ item }) {
             className="text-center"
           />
           <Button
-            variant="outline-secondary"
+            variant="outline-dark"
             onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
           >
             +

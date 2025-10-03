@@ -28,12 +28,12 @@ export default function CartPage() {
 
 
     return (
-        <Container className="mt-4">
-            <h2>Your Cart</h2>
+        <Container className="mt-4">            
+            <h2 className="fw-bold">Your Cart</h2>
             {state.cart.map((item) => (
                 <CartItem key={item.id} item={item} />
             ))}
-            <h4>Total: ₹{total}</h4>
+            <h4 className="pt-2">Total: ₹{total}</h4>
             <hr />
 
             <h3 className="mt-4">User Details</h3>
